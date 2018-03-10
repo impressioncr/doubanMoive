@@ -63,8 +63,9 @@ spider.getTotalPage = function() {
 
 spider.getTotalPage().then(res => {
 	console.log(res)
-	spider.getOnePage(1).then(res => {
-		console.log(res)
-		spider.getOnePage(15)
-	})
+	spider.getOnePage(1)
+	let loadedPages = []
+	for(let i = 1; i < res; i ++) {
+		console.log(i * 15);
+	}
 })
