@@ -16,7 +16,7 @@ const transQuerys = function (url, query) {
 }
 
 const spider = {
-  url
+	url
 }
 
 spider.loadPage = function(url, page = 1) {
