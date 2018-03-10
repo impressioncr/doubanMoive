@@ -35,14 +35,17 @@ spider.loadPage = function(url, page = 1) {
 }
 // 加载页面
 spider.getOnePage = function(page) {
-	spider.loadPage(url, page).then(res => {
-		let $ = cheerio.load(res)
-		$(".grid-view .item").each(function(i, elem) {
-			console.log(
-				$(elem)
-					.find(".pic img")
-					.attr("src")
-			)
+	return new Promise((resolve) => {
+		spider.loadPage(url, page).then(res => {
+			let $ = cheerio.load(res)
+			$(".grid-view .item").each(function(i, elem) {
+				console.log(
+					$(elem)
+						.find(".pic img")
+						.attr("src")
+				)
+			})
+			resolve('done' + page)
 		})
 	})
 }
@@ -60,5 +63,8 @@ spider.getTotalPage = function() {
 
 spider.getTotalPage().then(res => {
 	console.log(res)
-	spider.getOnePage(15)
+	spider.getOnePage(1).then(res => {
+		console.log(res)
+		spider.getOnePage(15)
+	})
 })
