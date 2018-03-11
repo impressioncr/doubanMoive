@@ -2,9 +2,10 @@ const superagent = require("superagent")
 const cheerio = require("cheerio")
 const fs = require('fs')
 const path = require('path')
+const { transQuerys } = require('./util/util')
 
 const url = "https://movie.douban.com/people/impressioncr/collect"
-
+// 查询字符串对象
 let query = {
   start: 1,
   sort: "",
@@ -12,11 +13,6 @@ let query = {
   rating: "all",
   filter: "all",
   mode: "grid"
-}
-const transQuerys = function(url, query) {
-  return `${url}?${Object.keys(query)
-    .map(k => `${k}=${query[k]}`)
-    .join("&")}`
 }
 
 const spider = {
@@ -84,7 +80,8 @@ spider.start = async function(page) {
           console.log('写入成功')
        }
      })
-    console.log(aPage)
+		console.log(aPage)
+		// 查询一页之间的间隔时间
     await spider.sleep(1000)
   }
 }
