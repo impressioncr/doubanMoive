@@ -80,8 +80,8 @@ spider.start = async function(page) {
           console.log('写入成功')
        }
      })
-		console.log(aPage)
-		// 查询一页之间的间隔时间
+    console.log(aPage)
+    // 查询一页之间的间隔时间
     await spider.sleep(1000)
   }
 }
