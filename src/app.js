@@ -1,10 +1,11 @@
-const superagent = require("superagent")
-const cheerio = require("cheerio")
+const superagent = require('superagent')
+const cheerio = require('cheerio')
 const fs = require('fs')
 const path = require('path')
 const { transQuerys } = require('./util/util')
+const { url } = require('./config')
 
-const url = "https://movie.douban.com/people/impressioncr/collect"
+
 // 查询字符串对象
 let query = {
   start: 1,
@@ -38,11 +39,11 @@ spider.getOnePage = function(page) {
     spider.loadPage(url, page).then(res => {
       let $ = cheerio.load(res)
       let data = []
-      $(".grid-view .item").each(function(i, elem) {
+      $('.grid-view .item').each(function(i, elem) {
         let movieItem = {
-          movieName: $(elem).find(".info .title em").text().split(' / ')[0],
-          enName: $(elem).find(".pic a").attr('title'),
-          pic: $(elem).find(".pic img").attr("src"),
+          movieName: $(elem).find('.info .title em').text().split(' / ')[0],
+          enName: $(elem).find('.pic a').attr('title'),
+          pic: $(elem).find('.pic img').attr('src'),
         }
         data.push(movieItem)
       })
@@ -56,7 +57,7 @@ spider.getTotalPage = function() {
     let totalPage = 0
     spider.loadPage(url).then(res => {
       let $ = cheerio.load(res)
-      totalPage = $(".thispage").attr("data-total-page")
+      totalPage = $('.thispage').attr('data-total-page')
       resolve(Number(totalPage))
     })
   })
@@ -75,8 +76,8 @@ spider.start = async function(page) {
     let aPage = await spider.getOnePage(i)
     fs.writeFile(__dirname + '/test.json', JSON.stringify(aPage), {flag: 'a'}, function (err) {
       if(err) {
-         console.error(err)
-         } else {
+          console.error(err)
+        } else {
           console.log('写入成功')
        }
      })
