@@ -21,9 +21,9 @@ const spider = {
 }
 // 加载单页，返回结果
 spider.loadPage = function(url, page = 1) {
-  query.start = (page - 1) * 15 ? (page - 1) : 1
+  query.start = (page - 1) * 15
   let pageUrl = transQuerys(url, query)
-  console.log(pageUrl)
+  console.log(pageUrl);
   return new Promise((resolve, reject) => {
     superagent.get(pageUrl).end(function(err, res) {
       if (err) {
@@ -37,6 +37,7 @@ spider.loadPage = function(url, page = 1) {
 spider.getOnePage = function(page) {
   return new Promise(resolve => {
     spider.loadPage(url, page).then(res => {
+      console.log('page', page);
       let $ = cheerio.load(res)
       let data = []
       $('.grid-view .item').each(function(i, elem) {
@@ -72,19 +73,22 @@ spider.sleep = function(time) {
 }
 // 爬虫需要工作了
 spider.start = async function(page) {
-  for (let i = 1; i < page; i++) {   
+  let totalMoive = []
+  for (let i = 1; i < page; i++) {
+    console.log('page', i);
     let aPage = await spider.getOnePage(i)
-    fs.writeFile(__dirname + '/test.json', JSON.stringify(aPage), {flag: 'a'}, function (err) {
-      if(err) {
-          console.error(err)
-        } else {
-          console.log('写入成功')
-       }
-     })
     console.log(aPage)
+    totalMoive.push(...aPage)
     // 查询一页之间的间隔时间
-    await spider.sleep(1000)
+    await spider.sleep(10)
   }
+  fs.writeFile(__dirname + '/movies.json', JSON.stringify(totalMoive), {flag: 'a'}, function (err) {
+    if(err) {
+        console.error(err)
+      } else {
+        console.log('写入成功')
+    }
+  })
 }
 spider.getTotalPage().then(res => {
   spider.start(res)
